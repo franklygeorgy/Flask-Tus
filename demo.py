@@ -1,3 +1,5 @@
+# A local directory - "uploads" must be present for this demo to work
+#
 from flask import Flask, render_template, send_from_directory, current_app
 from flask_tus_cont import TusManager
 
@@ -5,13 +7,6 @@ import os
 
 app = Flask(__name__)
 tm = TusManager(app, upload_url='/file-upload')
-
-@tm.upload_file_handler
-def upload_file_hander( upload_file_path, filename ):
-    app = current_app
-
-    app.logger.info( "doing something cool with {}, {}".format( upload_file_path, filename))
-    return filename
 
 
 @app.route("/")
@@ -21,7 +16,7 @@ def demo():
 # serve the uploaded files
 @app.route('/uploads/<path:filename>', methods=['GET'])
 def download(filename):
-	uploads = os.path.join('./uploads')
+	uploads = os.path('./uploads')
 	return send_from_directory(directory=uploads, filename=filename)
 
 if __name__ == '__main__':
