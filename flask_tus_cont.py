@@ -225,7 +225,7 @@ class TusManager(object):
         response.headers['Upload-Offset'] = offset
         if length is not None:
             response.headers['Upload-Length'] = length
-        if metadata is not None:
+        if metadata == None:
             response.headers['Upload-Metadata'] = request.headers['Upload-Metadata']
 
         return response

@@ -1,14 +1,12 @@
-# Flask-Tus
+# Flask-Tus-Cont
 Flask Extension implementing the Tus.io server protocol
 
-As of May, 2020, I am using this code in a production enterprise application
-running on Google Compute Engine with Uppy as the frontend (Javascript client).
-YMMV, but I'm confident this _can_ work. The code could use some work, but it
-does in fact work.
+This repo is a fork of the fixed repo from jzwolak on github, [repo found here](https://github.com/jzwolak/Flask-Tus).
+jzwolak's repo is a pull request of the original repo by matthoskins1980 [found here](https://github.com/matthoskins1980/Flask-Tus)
 
 ## Prerequisites (redis)
 
-Currently flask-tus is reliant on a local redis server.  This is used for caching information about
+Currently flask-tus-cont is reliant on a local redis server.  This is used for caching information about
 uploads in progress.  It is on the roadmap to remove this dependancy.  You must install the redis python package
 for this extension to work.
 

@@ -1,10 +1,10 @@
 from flask import Flask, render_template, send_from_directory, current_app
-from flask.ext.tus import tus_manager
+from flask_tus_cont import TusManager
 
 import os
 
 app = Flask(__name__)
-tm = tus_manager(app, upload_url='/file-upload')
+tm = TusManager(app, upload_url='/file-upload')
 
 @tm.upload_file_handler
 def upload_file_hander( upload_file_path, filename ):
@@ -21,7 +21,7 @@ def demo():
 # serve the uploaded files
 @app.route('/uploads/<path:filename>', methods=['GET'])
 def download(filename):
-	uploads = os.path.join(app.root_path, tm.upload_folder)
+	uploads = os.path.join('./uploads')
 	return send_from_directory(directory=uploads, filename=filename)
 
 if __name__ == '__main__':
