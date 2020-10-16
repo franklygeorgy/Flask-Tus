@@ -15,27 +15,36 @@ except ImportError:
 
 class TusManager(object):
 
-    def __init__(self, app=None, upload_url='/file-upload', upload_folder='uploads/', overwrite=True,
+    def __init__(self, app=None, overwrite=True,
                  upload_finish_cb=None):
         self.tus_api_version = '1.0.0'
         self.tus_api_version_supported = '1.0.0'
         self.tus_api_extensions = ['creation', 'termination', 'file-check']
-        self.tus_max_file_size = 4294967296  # 4GByte
+        self.tus_max_file_size = 4294967296  # 4GByte (in bytes)
         self.file_overwrite = overwrite
         self.upload_finish_cb = upload_finish_cb
         self.upload_file_handler_cb = None
 
         self.blueprint = Blueprint('tus-manager', __name__)
 
-        if app is not None:
-            self.init_app(app, upload_url, upload_folder)
+        if (app is not None):
+            self.init_app(app)
 
 
-    def init_app(self, app, upload_url=None, upload_folder=None):
-        if upload_url is not None:
-            self.upload_url = upload_url
-        if upload_folder is not None:
-            self.upload_folder = upload_folder
+    def init_app(self, app,**kwargs):
+        if (hasattr(app, 'config')):
+            setattr(self, 'upload_url', app.config.get('tus_uploads_url', '/file-upload'))
+            setattr(self, 'upload_folder', app.config.get('tus_uploads_folder', 'uploads/'))
+            setattr(self, 'tus_max_file_size', app.config.get('tus_max_file_size_in_bytes', 4294967296))
+            setattr(self, 'file_overwrite', app.config.get('tus_file_overwrite', True))
+
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        if ( hasattr(self, 'upload_folder') == False):
+            self.upload_folder = 'uploads/'
+        if ( hasattr(self, 'upload_url') == False):
+            self.upload_url = '/file-upload'
+            
         self._register_routes()
         self.app = app
         self.app.register_blueprint(self.blueprint)

@@ -14,10 +14,10 @@ with open("README.md", "r") as fh:
 
 setup(
     name='Flask-Tus-Cont',
-    version='0.6.1',
+    version='1.1.0',
     url='https://github.com/gnubyte/Flask-Tus',
     license='MIT',
-    author='Matt Hoskins',
+    author='Patrick Hastings',
     author_email='phastings@openmobo.com',
     description='TUS protocol implementation',
     long_description=long_description,
