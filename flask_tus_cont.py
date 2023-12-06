@@ -7,10 +7,19 @@ import uuid
 # Find the stack on which we want to store the database connection.
 # Starting with Flask 0.9, the _app_ctx_stack is the correct one,
 # before that we need to use the _request_ctx_stack.
+# _app_ctx_stack is now deprecated use g
+tus_using_g = False  # Is there a better way to do this?
 try:
-    from flask import _app_ctx_stack as stack
+    from flask import g
+    tus_using_g = True
 except ImportError:
-    from flask import _request_ctx_stack as stack
+    try:
+        from flask import _app_ctx_stack as stack
+    except ImportError:
+        try:
+            from flask import _request_ctx_stack as stack
+        except ImportError:
+            raise ImportError("Couldn't import _app_ctx_stack, _request_ctx_stack, or g from flask")
 
 
 class TusManager(object):
@@ -94,11 +103,16 @@ class TusManager(object):
 
     @property
     def redis_connection(self):
-        ctx = stack.top
-        if ctx is not None:
-            if not hasattr(ctx, 'tus_redis'):
-                ctx.tus_redis = self.redis_connect()
-            return ctx.tus_redis
+        if tus_using_g:
+            # use g instead
+            data = g.setdefault("_flask_tus", {tus_redis: self.redis_connect()})
+            return data["tus_redis"]
+        else:
+            ctx = stack.top
+            if ctx is not None:
+                if not hasattr(ctx, 'tus_redis'):
+                    ctx.tus_redis = self.redis_connect()
+                return ctx.tus_redis
 
     def _parse_metadata(self):
         metadata = {}
