@@ -105,8 +105,8 @@ class TusManager(object):
     def redis_connection(self):
         if tus_using_g:
             # use g instead
-            data = g.setdefault("_flask_tus", {tus_redis: self.redis_connect()})
-            return data["tus_redis"]
+            data = g.setdefault("_flask_tus", {"redis": self.redis_connect()})
+            return data["redis"]
         else:
             ctx = stack.top
             if ctx is not None:
