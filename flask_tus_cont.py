@@ -49,6 +49,10 @@ class TusManager(object):
         self.app = app
         self.app.register_blueprint(self.blueprint)
 
+        # call redis_connect early to catch connection problems
+        # server not running, wrong url, etc
+        self.redis_connect().client()
+
 
     def _register_routes(self):
 
