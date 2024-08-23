@@ -7,7 +7,7 @@ jzwolak's repo is a pull request of the original repo by matthoskins1980 [found 
 ## Prerequisites (redis)
 
 Currently flask-tus-cont is reliant on a local redis server.  This is used for caching information about
-uploads in progress.  It is on the roadmap to remove this dependancy.  You must install the redis python package
+uploads in progress.  It is on the roadmap to remove this dependancy.  You must install the redis python package and have a running redis server
 for this extension to work.
 
 ```
