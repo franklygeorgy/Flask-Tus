@@ -34,7 +34,7 @@ pip install Flask-Tus-Cont
 
 ```python
 from flask import Flask, render_template, send_from_directory
-from flask_tus_cont import tus_manager
+from flask_tus_cont import TusManager
 import os
 
 app = Flask(__name__)
