@@ -26,6 +26,7 @@ class TusManager(object):
 
     def __init__(self, app=None, overwrite=True,
                  upload_finish_cb=None):
+        self.create_missing_upload = False  # create upload folder if missing
         self.tus_api_version = '1.0.0'
         self.tus_api_version_supported = '1.0.0'
         self.tus_api_extensions = ['creation', 'termination', 'file-check']
@@ -191,6 +192,11 @@ class TusManager(object):
         p.execute()
 
         try:
+            if not os.path.isdir(self.upload_folder):
+                if self.create_missing_upload:
+                    os.makedirs(self.upload_folder, exist_ok=True)
+                else:
+                    raise Exception(os.path.abspath(self.upload_folder) + " doesn't exist and create_missing_upload is False")
             open(os.path.join(self.upload_folder, resource_id), "w").close()
         except IOError as e:
             self.app.logger.error("Unable to create file: {}".format(e))
